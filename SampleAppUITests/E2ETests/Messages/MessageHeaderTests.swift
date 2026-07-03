@@ -21,14 +21,14 @@ final class MessageHeaderTests: XCTestCase {
     }
 
     /// Header shows the peer's display name. (1TO1-006 / E2E-026 name)
-    func test_1TO1_006_headerShowsName() {
+    func test_1TO1_headerShowsName() {
         openSeeded()
         XCTAssertTrue(app.staticTexts[TestConfig.userBDisplayName].waitForExistence(timeout: 10),
                       "Header did not show \(TestConfig.userBDisplayName)")
     }
 
     /// Header renders an avatar (an image element beside the name). (1TO1-007 / E2E-026 avatar)
-    func test_1TO1_007_headerShowsAvatar() {
+    func test_1TO1_headerShowsAvatar() {
         openSeeded()
         XCTAssertTrue(app.staticTexts[TestConfig.userBDisplayName].waitForExistence(timeout: 10),
                       "Header name missing")
@@ -39,30 +39,32 @@ final class MessageHeaderTests: XCTestCase {
     }
 
     /// Header exposes a voice-call button. (1TO1-012)
-    func test_1TO1_012_voiceCallButtonVisible() {
+    func test_1TO1_voiceCallButtonVisible() {
         openSeeded()
         XCTAssertTrue(voiceCallButton().waitForExistence(timeout: 8),
                       "Voice-call button not present in header")
     }
 
     /// Header exposes a video-call button. (1TO1-013)
-    func test_1TO1_013_videoCallButtonVisible() {
+    func test_1TO1_videoCallButtonVisible() {
         openSeeded()
         XCTAssertTrue(videoCallButton().waitForExistence(timeout: 8),
                       "Video-call button not present in header")
     }
 
     /// The info affordance navigates to the User Info screen. (1TO1-014)
-    func test_1TO1_014_infoNavigatesToUserInfo() {
+    func test_1TO1_infoNavigatesToUserInfo() {
         openSeeded()
         XCTAssertTrue(
             ComponentQueries.openHeaderDetails(app, infoLabel: ComponentQueries.HeaderMenu.userInfo),
             "Could not open User Info from header menu"
         )
         // On User Info the composer is gone and the peer name persists.
-        XCTAssertTrue(app.staticTexts[TestConfig.userBDisplayName].waitForExistence(timeout: 8)
-                        || app.staticTexts["User Info"].exists,
-                      "User Info screen did not appear")
+        XCTAssertTrue(
+            app.staticTexts[TestConfig.userBDisplayName].waitForExistence(timeout: 8)
+                || app.staticTexts["User Info"].exists,
+            "User Info screen did not appear"
+        )
     }
 
     // MARK: - Header locators

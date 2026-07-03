@@ -26,7 +26,7 @@ final class ReactionsTests: XCTestCase {
     // MARK: - 1:1 reactions
 
     /// B reacts to a message via REST; A's chat stays stable and the message is still shown. (RT-REACT-001)
-    func test_RT_REACT_001_peerReactionArrives() throws {
+    func test_RT_REACT_peerReactionArrives() throws {
         openSeeded()
         let token = "E2E-react\(UUID().uuidString.prefix(8))"
         let id: Int = try runBlocking { try await PeerActions.sendTextMessage(token) }
@@ -39,7 +39,7 @@ final class ReactionsTests: XCTestCase {
     }
 
     /// A reacts to a message via the UI long-press; no crash. (1TO1-045 / RT-REACT-002)
-    func test_1TO1_045_ownReactionViaUI() throws {
+    func test_1TO1_ownReactionViaUI() throws {
         openSeeded()
         let token = "E2E-uireact\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -49,13 +49,15 @@ final class ReactionsTests: XCTestCase {
         // The reaction row (emoji shortcuts) or a "React"/"Add Reaction" entry sits atop the popup. Tap an
         // emoji if present, else a React option; either way the screen must stay stable.
         tapAnyReactionAffordance()
-        XCTAssertTrue(ComponentQueries.composer(app).waitForExistence(timeout: 8)
-                        || app.buttons["More"].exists,
-                      "Screen not stable after reacting via UI")
+        XCTAssertTrue(
+            ComponentQueries.composer(app).waitForExistence(timeout: 8)
+                || app.buttons["More"].exists,
+            "Screen not stable after reacting via UI"
+        )
     }
 
     /// Smoke: long-press a peer message (reaction reachable). (E2E-036)
-    func test_E2E_036_addReactionSmoke() throws {
+    func test_E2E_addReactionSmoke() throws {
         openSeeded()
         let token = "E2E-rsmoke\(UUID().uuidString.prefix(8))"
         try runBlocking { _ = try await PeerActions.sendTextMessage(token) }
@@ -71,7 +73,7 @@ final class ReactionsTests: XCTestCase {
 
     /// B adds then removes a reaction via REST; the message survives and the screen stays stable.
     /// (RT-REACT-003 / E2E-039 / 1TO1-046)
-    func test_RT_REACT_003_peerAddThenRemove() throws {
+    func test_RT_REACT_peerAddThenRemove() throws {
         openSeeded()
         let token = "E2E-rar\(UUID().uuidString.prefix(8))"
         let id: Int = try runBlocking { try await PeerActions.sendTextMessage(token) }
@@ -86,7 +88,7 @@ final class ReactionsTests: XCTestCase {
     }
 
     /// B reacts after A has the chat open; message stays and screen stable. (1TO1-047 / E2E-037)
-    func test_1TO1_047_peerReactionRealtime() throws {
+    func test_1TO1_peerReactionRealtime() throws {
         openSeeded()
         let token = "E2E-prt\(UUID().uuidString.prefix(8))"
         let id: Int = try runBlocking { try await PeerActions.sendTextMessage(token) }
@@ -96,7 +98,7 @@ final class ReactionsTests: XCTestCase {
     }
 
     /// Tap a reacted message's badge; screen stays stable (reactors list is best-effort). (1TO1-048 / E2E-038)
-    func test_1TO1_048_tapReactionStable() throws {
+    func test_1TO1_tapReactionStable() throws {
         openSeeded()
         let token = "E2E-tapr\(UUID().uuidString.prefix(8))"
         let id: Int = try runBlocking { try await PeerActions.sendTextMessage(token) }
@@ -111,7 +113,7 @@ final class ReactionsTests: XCTestCase {
     // MARK: - Group reactions (GRP-039..044)
 
     /// B (member) reacts to a group message via REST; the group chat stays stable. (GRP-039)
-    func test_GRP_039_peerReactsInGroup() throws {
+    func test_GRP_peerReactsInGroup() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
 

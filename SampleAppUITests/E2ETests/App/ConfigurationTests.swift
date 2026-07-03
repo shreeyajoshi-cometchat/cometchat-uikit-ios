@@ -16,7 +16,7 @@ final class ConfigurationTests: XCTestCase {
     }
 
     /// Rotating to landscape and back preserves a sent message. (E2E-064)
-    func test_E2E_064_rotationPreservesMessage() {
+    func test_E2E_rotationPreservesMessage() {
         openSeeded()
         let token = "E2E-rot\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -29,7 +29,7 @@ final class ConfigurationTests: XCTestCase {
     }
 
     /// Rotating with a draft in the composer preserves the draft. (E2E-065)
-    func test_E2E_065_rotationPreservesDraft() {
+    func test_E2E_rotationPreservesDraft() {
         openSeeded()
         let draft = "E2E-draft\(UUID().uuidString.prefix(8))"
         let composer = ComponentQueries.composer(app)
@@ -44,13 +44,15 @@ final class ConfigurationTests: XCTestCase {
     }
 
     /// The app renders under the active appearance (dark/light follows system) without crashing. (E2E-066/067)
-    func test_E2E_066_067_themeRendersWithoutCrash() {
+    func test_E2E_themeRendersWithoutCrash() {
         app = AppLauncher.launchAndWaitForHome()
         XCTAssertTrue(app.tabBars.firstMatch.exists, "Home did not render under the active appearance")
         // Open a conversation too — the message list renders under the theme.
-        XCTAssertTrue(AppLauncher.openConversationWith(app, displayName: TestConfig.userBDisplayName)
-                        || app.tabBars.firstMatch.exists,
-                      "App did not stay rendered under the active appearance")
+        XCTAssertTrue(
+            AppLauncher.openConversationWith(app, displayName: TestConfig.userBDisplayName)
+                || app.tabBars.firstMatch.exists,
+            "App did not stay rendered under the active appearance"
+        )
     }
 
     private func openSeeded() {

@@ -24,7 +24,7 @@ final class GroupJoinTests: XCTestCase {
     }
 
     /// Join with the correct password → the group opens and A joins on the backend. (GRP-011)
-    func test_GRP_011_joinPasswordGroupCorrect() throws {
+    func test_GRP_joinPasswordGroupCorrect() throws {
         openJoinSheet()
         enterPassword(Self.password)
         tapJoin()
@@ -43,7 +43,7 @@ final class GroupJoinTests: XCTestCase {
     }
 
     /// Join with a wrong password → the join is blocked (group does not open; A is not a member). (GRP-012)
-    func test_GRP_012_joinPasswordGroupWrong() throws {
+    func test_GRP_joinPasswordGroupWrong() throws {
         openJoinSheet()
         enterPassword("wrong-\(UUID().uuidString.prefix(6))")
         tapJoin()
@@ -78,9 +78,11 @@ final class GroupJoinTests: XCTestCase {
         cell.tap()
 
         // The Join Group sheet presents its password field.
-        XCTAssertTrue(app.textFields["Enter Password"].waitForExistence(timeout: 10)
-                        || app.textFields.firstMatch.waitForExistence(timeout: 5),
-                      "Join Group password sheet did not appear")
+        XCTAssertTrue(
+            app.textFields["Enter Password"].waitForExistence(timeout: 10)
+                || app.textFields.firstMatch.waitForExistence(timeout: 5),
+            "Join Group password sheet did not appear"
+        )
     }
 
     private func enterPassword(_ pw: String) {

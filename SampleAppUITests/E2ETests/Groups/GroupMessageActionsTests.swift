@@ -15,7 +15,7 @@ final class GroupMessageActionsTests: XCTestCase {
     }
 
     /// Edit an own group message; the edited text renders. (GRP-023)
-    func test_GRP_023_editOwnGroupMessage() throws {
+    func test_GRP_editOwnGroupMessage() throws {
         openGroup()
         let token = "E2E-gedit\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -31,7 +31,7 @@ final class GroupMessageActionsTests: XCTestCase {
     }
 
     /// Edited group message shows an Edited marker. (GRP-025)
-    func test_GRP_025_editedShowsMarker() throws {
+    func test_GRP_editedShowsMarker() throws {
         openGroup()
         let token = "E2E-gmark\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -46,7 +46,7 @@ final class GroupMessageActionsTests: XCTestCase {
     }
 
     /// Delete an own group message; the placeholder replaces it. (GRP-027 / GRP-030)
-    func test_GRP_027_deleteOwnGroupMessage() throws {
+    func test_GRP_deleteOwnGroupMessage() throws {
         openGroup()
         let token = "E2E-gdel\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -54,25 +54,29 @@ final class GroupMessageActionsTests: XCTestCase {
         XCTAssertTrue(ComponentQueries.openMessageOptions(app, bubbleText: token), "Long-press failed")
         XCTAssertTrue(ComponentQueries.tapMessageOption(app, label: ComponentQueries.MessageOption.delete), "Delete missing")
         _ = ComponentQueries.confirmDestructiveAction(app)
-        XCTAssertTrue(ComponentQueries.waitForDeletedPlaceholder(app, timeout: 12)
-                        || !ComponentQueries.waitForBubble(app, text: token, timeout: 3),
-                      "Group message not deleted")
+        XCTAssertTrue(
+            ComponentQueries.waitForDeletedPlaceholder(app, timeout: 12)
+                || !ComponentQueries.waitForBubble(app, text: token, timeout: 3),
+            "Group message not deleted"
+        )
     }
 
     /// Copy option present in a group message popup. (GRP-084)
-    func test_GRP_084_copyGroupMessage() throws {
+    func test_GRP_copyGroupMessage() throws {
         openGroup()
         let token = "E2E-gcopy\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
         XCTAssertTrue(ComponentQueries.waitForBubble(app, text: token, timeout: 14), "Message did not send")
         XCTAssertTrue(ComponentQueries.openMessageOptions(app, bubbleText: token), "Long-press failed")
-        XCTAssertTrue(app.buttons[ComponentQueries.MessageOption.copy].waitForExistence(timeout: 6)
-                        || app.staticTexts[ComponentQueries.MessageOption.copy].exists,
-                      "Copy option missing in group popup")
+        XCTAssertTrue(
+            app.buttons[ComponentQueries.MessageOption.copy].waitForExistence(timeout: 6)
+                || app.staticTexts[ComponentQueries.MessageOption.copy].exists,
+            "Copy option missing in group popup"
+        )
     }
 
     /// Long-press a group message shows the action popup with at least one known option. (GRP-086)
-    func test_GRP_086_longPressShowsActionPopup() throws {
+    func test_GRP_longPressShowsActionPopup() throws {
         openGroup()
         let token = "E2E-glp\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)

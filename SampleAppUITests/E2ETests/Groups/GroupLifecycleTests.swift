@@ -33,7 +33,7 @@ final class GroupLifecycleTests: XCTestCase {
     // MARK: - Leave group (GRP-068)
 
     /// As a participant, Leave the group: tap Leave → confirm → the member is removed on the backend.
-    func test_GRP_068_leaveGroup() throws {
+    func test_GRP_leaveGroup() throws {
         // A must be a non-owner to leave without transferring ownership.
         let context = try runBlocking { try await SeedData.createGroupOwnedByBWithAAs("participant") }
         ctx = context
@@ -56,16 +56,18 @@ final class GroupLifecycleTests: XCTestCase {
 
     /// As the owner, leaving requires transferring ownership: Leave → Ownership Transfer → Transfer →
     /// select member → Done. Assert on the backend that the new owner (B) is admin-scoped.
-    func test_GRP_080_transferOwnership() throws {
+    func test_GRP_transferOwnership() throws {
         let g = try runBlocking { try await SeedData.createTestGroupWithMember() } // A = owner
         group = g
         openGroupInfo(name: g.name)
 
         tapCard("Leave")
         // Owner path: an "Ownership Transfer" card appears with a "Transfer" button.
-        XCTAssertTrue(app.staticTexts["Ownership Transfer"].waitForExistence(timeout: 8)
-                        || app.buttons["Transfer"].exists,
-                      "Ownership Transfer prompt did not appear for the owner")
+        XCTAssertTrue(
+            app.staticTexts["Ownership Transfer"].waitForExistence(timeout: 8)
+                || app.buttons["Transfer"].exists,
+            "Ownership Transfer prompt did not appear for the owner"
+        )
         XCTAssertTrue(tapHittable("Transfer", timeout: 8), "Transfer button did not respond")
 
         // Member picker: select the other member (B), then confirm with Done.
@@ -86,7 +88,7 @@ final class GroupLifecycleTests: XCTestCase {
     // MARK: - Add members (GRP-072, GRP-073)
 
     /// The Add Members screen lists non-member users.
-    func test_GRP_072_addMembersShowsNonMembers() throws {
+    func test_GRP_addMembersShowsNonMembers() throws {
         let g = try runBlocking { try await SeedData.createEmptyTestGroup() }
         group = g
         openGroupInfo(name: g.name)
@@ -101,7 +103,7 @@ final class GroupLifecycleTests: XCTestCase {
 
     /// Selecting a user and confirming adds them to the group (backend-verified). Search for User B,
     /// select the row, tap "Add N Members".
-    func test_GRP_073_addMemberJoinsGroup() throws {
+    func test_GRP_addMemberJoinsGroup() throws {
         let g = try runBlocking { try await SeedData.createEmptyTestGroup() }
         group = g
         openGroupInfo(name: g.name)
@@ -132,7 +134,7 @@ final class GroupLifecycleTests: XCTestCase {
     // MARK: - Banned members list (GRP-075)
 
     /// A member banned via REST appears in the Banned Members list.
-    func test_GRP_075_bannedMemberInList() throws {
+    func test_GRP_bannedMemberInList() throws {
         let g = try runBlocking { () -> SeedData.TestGroup in
             let g = try await SeedData.createTestGroupWithMember()
             try await PeerActions.banGroupMember(guid: g.guid, uid: g.memberUid)
@@ -150,7 +152,7 @@ final class GroupLifecycleTests: XCTestCase {
 
     /// Unban a banned member from the Banned Members list: tap the row's trailing "Close" (X) → "Unban"
     /// confirm → assert on the backend the member is no longer banned (the ERR_BANNED probe clears).
-    func test_GRP_076_unbanMember() throws {
+    func test_GRP_unbanMember() throws {
         let g = try runBlocking { () -> SeedData.TestGroup in
             let g = try await SeedData.createTestGroupWithMember()
             try await PeerActions.banGroupMember(guid: g.guid, uid: g.memberUid)

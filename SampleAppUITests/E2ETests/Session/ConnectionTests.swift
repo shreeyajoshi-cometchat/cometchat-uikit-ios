@@ -15,7 +15,7 @@ final class ConnectionTests: XCTestCase {
     }
 
     /// Navigating tabs with live traffic keeps the app on a valid home screen. (E2E-060)
-    func test_E2E_060_navigationStableWithTraffic() throws {
+    func test_E2E_navigationStableWithTraffic() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         app = AppLauncher.launchAndWaitForHome()
         for tab in [AppLauncher.TabLabel.users, AppLauncher.TabLabel.groups, AppLauncher.TabLabel.chats] {
@@ -26,7 +26,7 @@ final class ConnectionTests: XCTestCase {
     }
 
     /// A WebSocket-delivered message from B lands on A's open chat. (E2E-063 / RT-MSG hard assertion)
-    func test_E2E_063_webSocketDeliversLive() throws {
+    func test_E2E_webSocketDeliversLive() throws {
         openSeeded()
         let token = "E2E-ws\(UUID().uuidString.prefix(8))"
         try runBlocking { _ = try await PeerActions.sendTextMessage(token) }
@@ -35,7 +35,7 @@ final class ConnectionTests: XCTestCase {
     }
 
     /// B sends 3 while A is on the Chats list; opening the chat shows them (sync). (RT-CONN-001)
-    func test_RT_CONN_001_syncMessagesSentWhileAway() throws {
+    func test_RT_CONN_syncMessagesSentWhileAway() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         app = AppLauncher.launchAndWaitForHome()
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.chats)
@@ -52,16 +52,18 @@ final class ConnectionTests: XCTestCase {
     }
 
     /// The conversation list refreshes with a new message preview. (RT-CONN-002)
-    func test_RT_CONN_002_listRefreshesWithNewMessage() throws {
+    func test_RT_CONN_listRefreshesWithNewMessage() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         app = AppLauncher.launchAndWaitForHome()
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.chats)
         let token = "E2E-refresh\(UUID().uuidString.prefix(8))"
         try runBlocking { _ = try await PeerActions.sendTextMessage(token) }
-        XCTAssertTrue(ComponentQueries.waitForBubbleContaining(app, substring: token, timeout: 20)
-                        || app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", token)).firstMatch.waitForExistence(timeout: 5)
-                        || app.tabBars.firstMatch.exists,
-                      "Conversation list did not refresh / stay stable")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubbleContaining(app, substring: token, timeout: 20)
+                || app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", token)).firstMatch.waitForExistence(timeout: 5)
+                || app.tabBars.firstMatch.exists,
+            "Conversation list did not refresh / stay stable"
+        )
     }
 
     private func openSeeded() {

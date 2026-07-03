@@ -15,7 +15,7 @@ final class CallsTests: XCTestCase {
     }
 
     /// The header exposes call buttons. (E2E-048)
-    func test_E2E_048_callButtonsInHeader() {
+    func test_E2E_callButtonsInHeader() {
         openSeeded()
         let hasCall = app.buttons.matching(
             NSPredicate(format: "label CONTAINS[c] 'call' OR label CONTAINS[c] 'voice' OR label CONTAINS[c] 'video'")
@@ -24,7 +24,7 @@ final class CallsTests: XCTestCase {
     }
 
     /// Tapping voice-call shows an outgoing surface or the screen stays stable. (1TO1-094 / E2E-049)
-    func test_1TO1_094_voiceCallInitiates() {
+    func test_1TO1_voiceCallInitiates() {
         monitorPermissionDialogs()
         openSeeded()
         tapCallButton(video: false)
@@ -32,7 +32,7 @@ final class CallsTests: XCTestCase {
     }
 
     /// Tapping video-call shows an outgoing surface or the screen stays stable. (1TO1-095)
-    func test_1TO1_095_videoCallInitiates() {
+    func test_1TO1_videoCallInitiates() {
         monitorPermissionDialogs()
         openSeeded()
         tapCallButton(video: true)
@@ -40,7 +40,7 @@ final class CallsTests: XCTestCase {
     }
 
     /// Starting then cancelling a call returns to the messages screen. (1TO1-096 / E2E-050)
-    func test_1TO1_096_cancelCallReturnsToChat() {
+    func test_1TO1_cancelCallReturnsToChat() {
         monitorPermissionDialogs()
         openSeeded()
         tapCallButton(video: false)

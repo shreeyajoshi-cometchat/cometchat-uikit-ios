@@ -18,13 +18,13 @@ final class MediaMessagesTests: XCTestCase {
     // MARK: - 1:1 attachment affordances (send side)
 
     /// The attachment button opens an options sheet with at least one option. (1TO1-089)
-    func test_1TO1_089_attachmentSheetShowsOptions() throws {
+    func test_1TO1_attachmentSheetShowsOptions() throws {
         openSeeded()
         XCTAssertTrue(openAttachmentSheet(), "Attachment sheet did not open with options")
     }
 
     /// The attachment sheet offers an image/photo option. (1TO1-090 / E2E-021 / E2E-073)
-    func test_1TO1_090_imageOptionExists() throws {
+    func test_1TO1_imageOptionExists() throws {
         openSeeded()
         XCTAssertTrue(openAttachmentSheet(), "Attachment sheet did not open")
         XCTAssertTrue(sheetHasOption(["Photo", "Image", "Gallery", "Photo & Video Library", "Photo Library"]),
@@ -32,7 +32,7 @@ final class MediaMessagesTests: XCTestCase {
     }
 
     /// The attachment sheet offers a file/document option. (1TO1-092 / E2E-022 / E2E-076)
-    func test_1TO1_092_fileOptionExists() throws {
+    func test_1TO1_fileOptionExists() throws {
         openSeeded()
         XCTAssertTrue(openAttachmentSheet(), "Attachment sheet did not open")
         XCTAssertTrue(sheetHasOption(["File", "Document", "Attach File"]),
@@ -42,7 +42,7 @@ final class MediaMessagesTests: XCTestCase {
     // MARK: - 1:1 receive media (REST)
 
     /// B sends an image via REST; a media bubble arrives (or the screen stays stable). (1TO1-093 / E2E-077)
-    func test_1TO1_093_receiveImage() throws {
+    func test_1TO1_receiveImage() throws {
         openSeeded()
         try runBlocking { _ = try await PeerActions.sendImageToA() }
         // The header avatar makes `images.count` meaningless, so look for the media bubble's own label;
@@ -53,7 +53,7 @@ final class MediaMessagesTests: XCTestCase {
     }
 
     /// B sends a PDF via REST; the filename bubble ("test_document.pdf") arrives. (E2E-076 receive / GRP-035)
-    func test_E2E_077_receiveFile() throws {
+    func test_E2E_receiveFile() throws {
         openSeeded()
         try runBlocking { _ = try await PeerActions.sendFileToA() }
         let arrived = ComponentQueries.waitForBubbleContaining(app, substring: "test_document.pdf", timeout: 20)
@@ -65,7 +65,7 @@ final class MediaMessagesTests: XCTestCase {
     // MARK: - Group media (GRP-032, 035)
 
     /// The group attachment sheet offers an image option. (GRP-032)
-    func test_GRP_032_groupImageOption() throws {
+    func test_GRP_groupImageOption() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         openGroup(group)
@@ -77,7 +77,7 @@ final class MediaMessagesTests: XCTestCase {
     /// The group attachment sheet offers a video option. (GRP-033)
     /// Sheet rows surface as staticTexts: "Take a Photo" / "Photo Library" / "Video Library" /
     /// "Audio Library" / "Document" / "Poll" (confirmed via diagnostic dump).
-    func test_GRP_033_groupVideoOption() throws {
+    func test_GRP_groupVideoOption() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         openGroup(group)
@@ -87,7 +87,7 @@ final class MediaMessagesTests: XCTestCase {
     }
 
     /// The group attachment sheet offers an audio option. (GRP-034)
-    func test_GRP_034_groupAudioOption() throws {
+    func test_GRP_groupAudioOption() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         openGroup(group)
@@ -97,7 +97,7 @@ final class MediaMessagesTests: XCTestCase {
     }
 
     /// B (member) posts a PDF to the group via REST; the filename bubble arrives. (GRP-035)
-    func test_GRP_035_receiveGroupFile() throws {
+    func test_GRP_receiveGroupFile() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         openGroup(group)

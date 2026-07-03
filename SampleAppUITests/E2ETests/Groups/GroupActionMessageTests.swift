@@ -25,7 +25,7 @@ final class GroupActionMessageTests: XCTestCase {
     }
 
     /// Adding a member emits an action message naming them in the group. (RT-GRP-006)
-    func test_RT_GRP_006_memberAddedShowsActionMessage() throws {
+    func test_RT_GRP_memberAddedShowsActionMessage() throws {
         let g = try runBlocking { try await SeedData.createEmptyTestGroup() } // A owns, no other members
         group = g
         openGroupMessages(name: g.name)
@@ -36,7 +36,7 @@ final class GroupActionMessageTests: XCTestCase {
     }
 
     /// Banning a member emits an action message naming them. (RT-GRP-004)
-    func test_RT_GRP_004_memberBannedShowsActionMessage() throws {
+    func test_RT_GRP_memberBannedShowsActionMessage() throws {
         let g = try runBlocking { try await SeedData.createTestGroupWithMember() } // A owns, B member
         group = g
         openGroupMessages(name: g.name)
@@ -47,7 +47,7 @@ final class GroupActionMessageTests: XCTestCase {
     }
 
     /// Changing a member's scope emits an action message naming them. (RT-GRP-005)
-    func test_RT_GRP_005_scopeChangeShowsActionMessage() throws {
+    func test_RT_GRP_scopeChangeShowsActionMessage() throws {
         let g = try runBlocking { try await SeedData.createTestGroupWithMember() }
         group = g
         openGroupMessages(name: g.name)

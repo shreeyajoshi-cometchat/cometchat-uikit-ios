@@ -15,26 +15,26 @@ final class GroupHeaderTests: XCTestCase {
     }
     
     /// Header displays the group name. (GRP-052)
-    func test_GRP_052_headerShowsGroupName() throws {
+    func test_GRP_headerShowsGroupName() throws {
         let name = openGroup()
         XCTAssertTrue(app.staticTexts[name].waitForExistence(timeout: 10), "Group header did not show the name")
     }
     
     /// Header renders an avatar (or the name, proving the header rendered). (GRP-053)
-    func test_GRP_053_headerShowsAvatar() throws {
+    func test_GRP_headerShowsAvatar() throws {
         let name = openGroup()
         XCTAssertTrue(app.images.firstMatch.exists || app.staticTexts[name].waitForExistence(timeout: 8),
                       "Group header avatar/name not rendered")
     }
     
     /// Header renders (member-count subtitle logged non-fatal). (GRP-054)
-    func test_GRP_054_headerShowsMemberCount() throws {
+    func test_GRP_headerShowsMemberCount() throws {
         let name = openGroup()
         XCTAssertTrue(app.staticTexts[name].waitForExistence(timeout: 10), "Group header did not render")
     }
     
     /// The details menu navigates to Group Info. (GRP-057)
-    func test_GRP_057_detailsNavigatesToGroupInfo() throws {
+    func test_GRP_detailsNavigatesToGroupInfo() throws {
         _ = openGroup()
         XCTAssertTrue(ComponentQueries.openHeaderDetails(app, infoLabel: ComponentQueries.HeaderMenu.groupInfo),
                       "Could not open Group Info from header menu")
@@ -48,14 +48,16 @@ final class GroupHeaderTests: XCTestCase {
     }
     
     /// Back from Group Info returns to the group messages. (GRP-058)
-    func test_GRP_058_backFromDetailsReturnsToMessages() throws {
+    func test_GRP_backFromDetailsReturnsToMessages() throws {
         _ = openGroup()
         XCTAssertTrue(ComponentQueries.openHeaderDetails(app, infoLabel: ComponentQueries.HeaderMenu.groupInfo),
                       "Could not open Group Info")
         if let back = ComponentQueries.headerBackButton(app) { back.tap() } else { app.navigationBars.buttons.firstMatch.tap() }
-        XCTAssertTrue(ComponentQueries.composer(app).waitForExistence(timeout: 10)
-                      || app.staticTexts[group?.name ?? ""].exists,
-                      "Did not return to group messages")
+        XCTAssertTrue(
+            ComponentQueries.composer(app).waitForExistence(timeout: 10)
+                || app.staticTexts[group?.name ?? ""].exists,
+            "Did not return to group messages"
+        )
     }
     
     // MARK: - Helpers

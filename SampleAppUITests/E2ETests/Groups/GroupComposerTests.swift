@@ -16,7 +16,7 @@ final class GroupComposerTests: XCTestCase {
     }
 
     /// Send text in a group; the bubble renders. (GRP-013)
-    func test_GRP_013_sendTextInGroup() throws {
+    func test_GRP_sendTextInGroup() throws {
         openGroup()
         let token = "E2E-gsend\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -24,7 +24,7 @@ final class GroupComposerTests: XCTestCase {
     }
 
     /// Empty message cannot be sent in a group. (GRP-014)
-    func test_GRP_014_emptyMessageBlocked() throws {
+    func test_GRP_emptyMessageBlocked() throws {
         openGroup()
         let send = app.buttons["Send"]
         if send.exists && send.isHittable { send.tap() }
@@ -32,7 +32,7 @@ final class GroupComposerTests: XCTestCase {
     }
 
     /// Long text sends in a group; the tail renders. (GRP-016)
-    func test_GRP_016_longTextSends() throws {
+    func test_GRP_longTextSends() throws {
         openGroup()
         let tail = "gtail\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: String(repeating: "G", count: 1024) + tail)
@@ -41,7 +41,7 @@ final class GroupComposerTests: XCTestCase {
     }
 
     /// Composer clears after a successful group send. (GRP-018)
-    func test_GRP_018_composerClearsAfterSend() throws {
+    func test_GRP_composerClearsAfterSend() throws {
         openGroup()
         let token = "E2E-gclear\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -50,7 +50,7 @@ final class GroupComposerTests: XCTestCase {
     }
 
     /// A mention message sends in a group; trailing words render. (GRP-020)
-    func test_GRP_020_mentionSends() throws {
+    func test_GRP_mentionSends() throws {
         openGroup()
         let tail = "gmention\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: "@\(TestConfig.userBDisplayName) hi \(tail)")

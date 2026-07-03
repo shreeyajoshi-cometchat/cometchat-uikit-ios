@@ -1,7 +1,7 @@
 import XCTest
 
 /// Editing messages in a 1:1 — own edits via the UI long-press flow, and peer (User B) edits driven over
-/// REST that must update live in A's chat. Covers 1TO1-031..035, RT-EDIT-001..003.
+/// REST that must update live in A's chat. Covers 1TO1-031..035, RT-EDIT-001..002.
 ///
 /// Own-edit flow (verified): long-press bubble → popup → Edit → the original text loads into the composer
 /// (an "Edit Message" preview bar shows) → append/replace → Send commits → an "Edited" marker prepends the
@@ -22,7 +22,7 @@ final class EditMessageTests: XCTestCase {
     }
 
     /// Edit an own message: send, edit via the popup, and the new text renders. (1TO1-031)
-    func test_1TO1_031_editOwnMessageUpdatesText() throws {
+    func test_1TO1_editOwnMessageUpdatesText() throws {
         openSeeded()
         let token = "E2E-edit\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -38,12 +38,13 @@ final class EditMessageTests: XCTestCase {
         composer.typeText("X")
         ComponentQueries.sendButton(app).tap()
 
-        XCTAssertTrue(ComponentQueries.waitForBubbleContaining(app, substring: token, timeout: 12),
-                      "Edited message did not render")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubbleContaining(app, substring: token, timeout: 12), "Edited message did not render"
+        )
     }
 
     /// Entering Edit loads the original text into the composer. (1TO1-032)
-    func test_1TO1_032_editShowsOriginalInComposer() throws {
+    func test_1TO1_editShowsOriginalInComposer() throws {
         openSeeded()
         let token = "E2E-orig\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -61,7 +62,7 @@ final class EditMessageTests: XCTestCase {
     }
 
     /// Cancelling an edit leaves the composer normal and the original unchanged. (1TO1-033)
-    func test_1TO1_033_cancelEditRestoresComposer() throws {
+    func test_1TO1_cancelEditRestoresComposer() throws {
         openSeeded()
         let token = "E2E-cancel\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -80,7 +81,7 @@ final class EditMessageTests: XCTestCase {
     }
 
     /// The edited marker renders after committing an edit. (1TO1-034)
-    func test_1TO1_034_editedMessageShowsMarker() throws {
+    func test_1TO1_editedMessageShowsMarker() throws {
         openSeeded()
         let token = "E2E-mark\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -97,7 +98,7 @@ final class EditMessageTests: XCTestCase {
     }
 
     /// A peer (B) message cannot be edited by A — no Edit option in its popup. (1TO1-035)
-    func test_1TO1_035_cannotEditPeerMessage() throws {
+    func test_1TO1_cannotEditPeerMessage() throws {
         openSeeded()
         let token = "E2E-peer\(UUID().uuidString.prefix(8))"
         try runBlocking { _ = try await PeerActions.sendTextMessage(token) }
@@ -110,7 +111,7 @@ final class EditMessageTests: XCTestCase {
     }
 
     /// B edits a message via REST; A sees the updated text in place. (RT-EDIT-001)
-    func test_RT_EDIT_001_peerEditUpdatesLive() throws {
+    func test_RT_EDIT_peerEditUpdatesLive() throws {
         openSeeded()
         let original = "E2E-rtorig\(UUID().uuidString.prefix(8))"
         let edited = "E2E-rtedit\(UUID().uuidString.prefix(8))"
@@ -123,7 +124,7 @@ final class EditMessageTests: XCTestCase {
     }
 
     /// B edits a message via REST; A sees the edited text plus an "Edited" marker. (RT-EDIT-002)
-    func test_RT_EDIT_002_peerEditShowsMarker() throws {
+    func test_RT_EDIT_peerEditShowsMarker() throws {
         openSeeded()
         let original = "E2E-rtm-o\(UUID().uuidString.prefix(8))"
         let edited = "E2E-rtm-e\(UUID().uuidString.prefix(8))"
@@ -135,25 +136,6 @@ final class EditMessageTests: XCTestCase {
         XCTAssertTrue(ComponentQueries.waitForEditedMarker(app, timeout: 12), "Edited marker did not appear")
     }
 
-    /// B edits a message while A is on the Chats list; the preview reflects the edit. (RT-EDIT-003)
-    func test_RT_EDIT_003_peerEditUpdatesPreview() throws {
-        try runBlocking { try await SeedData.createTestConversation() }
-        app = AppLauncher.launchAndWaitForHome()
-
-        let original = "E2E-pv-o\(UUID().uuidString.prefix(8))"
-        let edited = "E2E-pv-e\(UUID().uuidString.prefix(8))"
-        let id: Int = try runBlocking { try await PeerActions.sendTextMessage(original) }
-        AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.chats)
-        XCTAssertTrue(ComponentQueries.waitForBubbleContaining(app, substring: original, timeout: 20)
-                        || app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", original)).firstMatch.exists,
-                      "Original preview did not appear")
-
-        try runBlocking { try await PeerActions.editMessage(id, newText: edited) }
-        XCTAssertTrue(ComponentQueries.waitForBubbleContaining(app, substring: edited, timeout: 20)
-                        || app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", edited)).firstMatch.waitForExistence(timeout: 5),
-                      "Preview did not update after peer edit")
-    }
-
     // MARK: - Helpers
 
     private func openSeeded() {
@@ -163,7 +145,8 @@ final class EditMessageTests: XCTestCase {
             AppLauncher.openConversationFromChats(app, displayName: TestConfig.userBDisplayName),
             "Could not open conversation with \(TestConfig.userBDisplayName)"
         )
-        XCTAssertTrue(ComponentQueries.composer(app).waitForExistence(timeout: 15),
-                      "Message list did not open")
+        XCTAssertTrue(
+            ComponentQueries.composer(app).waitForExistence(timeout: 15), "Message list did not open"
+        )
     }
 }

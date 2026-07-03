@@ -27,7 +27,7 @@ final class E2EFullAppTests: XCTestCase {
     // MARK: - Conversations (E2E-007, 008)
 
     /// Scrolling the conversation list keeps the home screen stable (pagination triggers no crash).
-    func test_E2E_007_conversationListPaginationScrolls() {
+    func test_E2E_conversationListPaginationScrolls() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.chats)
 
@@ -55,7 +55,7 @@ final class E2EFullAppTests: XCTestCase {
     ///      watchdog runner-kill. So coordinate-tap the trailing edge IMMEDIATELY, no query in between.
     ///   3. Never `.count` this list to assert the drop (~2000 staticTexts hangs the a11y bridge). Assert
     ///      on the backend instead — a stronger, crash-proof signal.
-    func test_E2E_008_deleteConversationRemovesRow() {
+    func test_E2E_deleteConversationRemovesRow() {
         try? runBlocking { try await SeedData.createTestConversation() }
 
         AppLauncher.launchAndWaitForHome(app)
@@ -122,7 +122,7 @@ final class E2EFullAppTests: XCTestCase {
     // MARK: - Users (E2E-011, 012)
 
     /// Scrolling the Users list (long, paginated) keeps the screen stable.
-    func test_E2E_011_usersListPaginationScrolls() {
+    func test_E2E_usersListPaginationScrolls() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.users)
 
@@ -133,7 +133,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Typing a known name into the Users search filters the list down to a matching cell.
-    func test_E2E_012_searchFiltersUsers() {
+    func test_E2E_searchFiltersUsers() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.users)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Users list did not render")
@@ -152,7 +152,7 @@ final class E2EFullAppTests: XCTestCase {
     // MARK: - Groups (E2E-015, 016, 018)
 
     /// The create-group entry point (Groups navbar trailing button) opens the create-group screen.
-    func test_E2E_015_createGroupViaUI() {
+    func test_E2E_createGroupViaUI() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.groups)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Groups list did not render")
@@ -163,7 +163,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Scrolling the Groups list keeps the screen stable.
-    func test_E2E_016_groupsListPaginationScrolls() {
+    func test_E2E_groupsListPaginationScrolls() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.groups)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Groups list did not render")
@@ -173,7 +173,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Typing into the Groups search filters the list to the matching group.
-    func test_E2E_018_searchFiltersGroups() {
+    func test_E2E_searchFiltersGroups() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.groups)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Groups list did not render")
@@ -193,7 +193,7 @@ final class E2EFullAppTests: XCTestCase {
 
     /// An empty composer cannot send: tapping Send with no text adds no bubble and keeps the composer
     /// empty (the UIKit composer disables/no-ops send when the input is blank).
-    func test_E2E_019_sendEmptyMessageBlocked() {
+    func test_E2E_sendEmptyMessageBlocked() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -214,7 +214,7 @@ final class E2EFullAppTests: XCTestCase {
 
     /// Edit an own message: send via UI, long-press → Edit (loads text into the composer), append text,
     /// re-send, and assert the "Edited" marker renders on the bubble.
-    func test_E2E_023_editMessageShowsEditedMarker() {
+    func test_E2E_editMessageShowsEditedMarker() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -244,7 +244,7 @@ final class E2EFullAppTests: XCTestCase {
 
     /// Delete an own message: send via UI, long-press → Delete → confirm, and assert the
     /// "This message was deleted" placeholder replaces the bubble.
-    func test_E2E_024_deleteMessageShowsPlaceholder() {
+    func test_E2E_deleteMessageShowsPlaceholder() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -273,7 +273,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Scrolling up in the message list keeps it stable (older-message pagination triggers no crash).
-    func test_E2E_025_messageListPaginationScrolls() {
+    func test_E2E_messageListPaginationScrolls() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -291,7 +291,7 @@ final class E2EFullAppTests: XCTestCase {
 
     /// The message list opens and is interactable — reactions are reachable via long-press (asserted at
     /// screen-presence depth).
-    func test_E2E_038_reactionsScreenPresence() {
+    func test_E2E_reactionsScreenPresence() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -302,7 +302,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Thread entry is reachable from the message list (screen-presence depth).
-    func test_E2E_043_threadScreenPresence() {
+    func test_E2E_threadScreenPresence() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -313,7 +313,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Sending a message renders a bubble; receipt ticks are images and not asserted.
-    func test_E2E_046_messageInfoScreenPresence() {
+    func test_E2E_messageInfoScreenPresence() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -328,7 +328,7 @@ final class E2EFullAppTests: XCTestCase {
     // MARK: - Calls (E2E-049, 050, 051, 052) — screen-presence
 
     /// Opening a 1:1 shows the call buttons in the header (screen-presence: message list renders).
-    func test_E2E_049_callButtonsHeaderPresence() {
+    func test_E2E_callButtonsHeaderPresence() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
@@ -339,7 +339,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// The Calls tab loads its call-log screen without crashing.
-    func test_E2E_051_callLogsLoad() throws {
+    func test_E2E_callLogsLoad() throws {
         AppLauncher.launchAndWaitForHome(app)
         guard AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.calls) else {
             throw XCTSkip("Calls tab not present in this build (CometChatCallsSDK not linked)")
@@ -349,7 +349,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Scrolling the call log keeps the screen stable.
-    func test_E2E_052_callLogsPaginationScrolls() throws {
+    func test_E2E_callLogsPaginationScrolls() throws {
         AppLauncher.launchAndWaitForHome(app)
         guard AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.calls) else {
             throw XCTSkip("Calls tab not present in this build (CometChatCallsSDK not linked)")
@@ -362,7 +362,7 @@ final class E2EFullAppTests: XCTestCase {
 
     /// Searching a group name from the Groups search surfaces the matching group (E2E-054 overlaps the
     /// groups search; kept distinct for traceability).
-    func test_E2E_054_searchGroupName() {
+    func test_E2E_searchGroupName() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.groups)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Groups list did not render")
@@ -380,7 +380,7 @@ final class E2EFullAppTests: XCTestCase {
     /// Searching message content from the Chats search opens the search screen and accepts input
     /// (screen-presence depth). The Chats-tab search field is read-only and pushes a dedicated search
     /// screen on tap, so we type into the editable field that appears there — not the read-only field.
-    func test_E2E_055_searchMessageContent() throws {
+    func test_E2E_searchMessageContent() throws {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.chats)
 
@@ -408,7 +408,7 @@ final class E2EFullAppTests: XCTestCase {
     }
 
     /// Searching for a non-matching string yields an empty result without crashing.
-    func test_E2E_056_searchEmptyState() {
+    func test_E2E_searchEmptyState() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.users)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Users list did not render")
@@ -429,7 +429,7 @@ final class E2EFullAppTests: XCTestCase {
     // MARK: - Shared UI (E2E-057, 058, 059) — screen-presence
 
     /// Avatars/badges/timestamps render in the conversation list (asserted as: the list shows cells).
-    func test_E2E_057_058_059_sharedUIElementsRender() {
+    func test_E2E_sharedUIElementsRender() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.chats)
@@ -443,7 +443,7 @@ final class E2EFullAppTests: XCTestCase {
 
     /// The create-group screen (used for public/private group creation) is reachable. Public/private is
     /// a toggle on that screen; reaching it covers E2E-068/069 at screen-presence depth.
-    func test_E2E_068_069_createGroupScreenReachable() {
+    func test_E2E_createGroupScreenReachable() {
         AppLauncher.launchAndWaitForHome(app)
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.groups)
         XCTAssertTrue(app.cells.firstMatch.waitForExistence(timeout: 15), "Groups list did not render")
@@ -455,7 +455,7 @@ final class E2EFullAppTests: XCTestCase {
     /// Admin-deletes-group mutates the shared backend (would remove a fixture group other tests rely
     /// on). Reaching the group-info screen where Delete-and-Exit lives covers the path at
     /// screen-presence depth without destroying shared state.
-    func test_E2E_072_groupInfoReachable() {
+    func test_E2E_groupInfoReachable() {
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(
             AppLauncher.openGroup(app, named: TestConfig.groupDisplayName),
@@ -481,7 +481,7 @@ final class E2EFullAppTests: XCTestCase {
     /// attached. Actually sending media requires the system photo/files picker (host permission dialogs,
     /// disallowed under zero-host-setup), so this asserts the affordance is present (only checks the
     /// attachment button exists).
-    func test_E2E_073_076_attachmentAffordancePresent() {
+    func test_E2E_attachmentAffordancePresent() {
         try? runBlocking { try await SeedData.createTestConversation() }
         AppLauncher.launchAndWaitForHome(app)
         XCTAssertTrue(

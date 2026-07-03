@@ -18,7 +18,7 @@ final class UnreadBadgeTests: XCTestCase {
     }
 
     /// Messages arriving while A sits on another tab surface an unread badge on B's conversation row. (RT-MSG-013)
-    func test_RT_MSG_013_unreadBadgeIncrements() throws {
+    func test_RT_MSG_unreadBadgeIncrements() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         app = AppLauncher.launchAndWaitForHome()
 
@@ -33,7 +33,7 @@ final class UnreadBadgeTests: XCTestCase {
     }
 
     /// Opening the conversation reads it; the unread badge on its row then clears. (RT-MSG-014)
-    func test_RT_MSG_014_unreadBadgeResetsOnOpen() throws {
+    func test_RT_MSG_unreadBadgeResetsOnOpen() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         app = AppLauncher.launchAndWaitForHome()
 

@@ -15,7 +15,7 @@ final class TypingIndicatorTests: XCTestCase {
     }
     
     /// A types; the header still shows B's name and no self "Typing…" appears. (1TO1-056 / RT-TYPE-001)
-    func test_1TO1_056_selfTypingNoIndicator() throws {
+    func test_1TO1_selfTypingNoIndicator() throws {
         openSeeded()
         let composer = ComponentQueries.composer(app)
         composer.tap(); composer.typeText("typing check")
@@ -24,7 +24,7 @@ final class TypingIndicatorTests: XCTestCase {
     }
     
     /// Type then send clears any typing state and shows the message. (RT-TYPE-003)
-    func test_RT_TYPE_003_typeThenSendClears() throws {
+    func test_RT_TYPE_typeThenSendClears() throws {
         openSeeded()
         let token = "E2E-type\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -34,7 +34,7 @@ final class TypingIndicatorTests: XCTestCase {
     
     /// B sends a real message (REST can't push typing); the header shows the name, no spurious "Typing…".
     /// (1TO1-054 / RT-TYPE-004)
-    func test_1TO1_054_peerHeaderStableNoTyping() throws {
+    func test_1TO1_peerHeaderStableNoTyping() throws {
         openSeeded()
         let token = "E2E-peerhdr\(UUID().uuidString.prefix(8))"
         try runBlocking { _ = try await PeerActions.sendTextMessage(token) }
@@ -43,7 +43,7 @@ final class TypingIndicatorTests: XCTestCase {
     }
     
     /// A group header stays stable with no spurious multi-user "Typing…". (RT-TYPE-006)
-    func test_RT_TYPE_006_groupHeaderStable() throws {
+    func test_RT_TYPE_groupHeaderStable() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         app = AppLauncher.launchAndWaitForHome()

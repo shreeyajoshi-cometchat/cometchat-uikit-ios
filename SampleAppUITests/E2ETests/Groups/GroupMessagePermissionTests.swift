@@ -26,7 +26,7 @@ final class GroupMessagePermissionTests: XCTestCase {
     }
 
     /// A regular participant cannot EDIT another member's message — the Edit option is absent. (GRP-026)
-    func test_GRP_026_participantCannotEditOthersMessage() throws {
+    func test_GRP_participantCannotEditOthersMessage() throws {
         let token = openGroupWithBMessage(aScope: "participant")
         XCTAssertTrue(ComponentQueries.openMessageOptions(app, bubbleText: token), "Long-press on B's message failed")
         XCTAssertFalse(messageOptionPresent(ComponentQueries.MessageOption.edit),
@@ -34,19 +34,21 @@ final class GroupMessagePermissionTests: XCTestCase {
     }
 
     /// An admin/owner can DELETE another member's message — the placeholder replaces it. (GRP-028)
-    func test_GRP_028_adminDeletesOthersMessage() throws {
+    func test_GRP_adminDeletesOthersMessage() throws {
         let token = openGroupWithBMessage(aScope: "admin") // admin path = A owns the group
         XCTAssertTrue(ComponentQueries.openMessageOptions(app, bubbleText: token), "Long-press on B's message failed")
         XCTAssertTrue(ComponentQueries.tapMessageOption(app, label: ComponentQueries.MessageOption.delete),
                       "Admin should see Delete on another member's message")
         _ = ComponentQueries.confirmDestructiveAction(app)
-        XCTAssertTrue(ComponentQueries.waitForDeletedPlaceholder(app, timeout: 12)
-                        || !ComponentQueries.waitForBubble(app, text: token, timeout: 3),
-                      "Admin's delete of another member's message did not take effect")
+        XCTAssertTrue(
+            ComponentQueries.waitForDeletedPlaceholder(app, timeout: 12)
+                || !ComponentQueries.waitForBubble(app, text: token, timeout: 3),
+            "Admin's delete of another member's message did not take effect"
+        )
     }
 
     /// A regular participant cannot DELETE another member's message — the Delete option is absent. (GRP-029)
-    func test_GRP_029_participantCannotDeleteOthersMessage() throws {
+    func test_GRP_participantCannotDeleteOthersMessage() throws {
         let token = openGroupWithBMessage(aScope: "participant")
         XCTAssertTrue(ComponentQueries.openMessageOptions(app, bubbleText: token), "Long-press on B's message failed")
         XCTAssertFalse(messageOptionPresent(ComponentQueries.MessageOption.delete),
@@ -54,15 +56,17 @@ final class GroupMessagePermissionTests: XCTestCase {
     }
 
     /// A moderator can DELETE another member's message — the placeholder replaces it. (GRP-031)
-    func test_GRP_031_moderatorDeletesOthersMessage() throws {
+    func test_GRP_moderatorDeletesOthersMessage() throws {
         let token = openGroupWithBMessage(aScope: "moderator")
         XCTAssertTrue(ComponentQueries.openMessageOptions(app, bubbleText: token), "Long-press on B's message failed")
         XCTAssertTrue(ComponentQueries.tapMessageOption(app, label: ComponentQueries.MessageOption.delete),
                       "Moderator should see Delete on another member's message")
         _ = ComponentQueries.confirmDestructiveAction(app)
-        XCTAssertTrue(ComponentQueries.waitForDeletedPlaceholder(app, timeout: 12)
-                        || !ComponentQueries.waitForBubble(app, text: token, timeout: 3),
-                      "Moderator's delete of another member's message did not take effect")
+        XCTAssertTrue(
+            ComponentQueries.waitForDeletedPlaceholder(app, timeout: 12)
+                || !ComponentQueries.waitForBubble(app, text: token, timeout: 3),
+            "Moderator's delete of another member's message did not take effect"
+        )
     }
 
     // MARK: - Helpers

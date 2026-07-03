@@ -80,7 +80,7 @@ final class E2EAdminCheckTests: XCTestCase {
     // MARK: - Members list (E2E-030)
 
     /// The Members modal lists the group's members (owner + the added member).
-    func test_E2E_030_membersListShows() {
+    func test_E2E_membersListShows() {
         openGroupInfo()
         openMembersModal()
         XCTAssertTrue(
@@ -93,7 +93,7 @@ final class E2EAdminCheckTests: XCTestCase {
     // MARK: - Admin affordances (E2E-031)
 
     /// As owner, the "Add Members" affordance is visible on Group Info (only admins/owners see it).
-    func test_E2E_031_adminSeesAddMembers() {
+    func test_E2E_adminSeesAddMembers() {
         openGroupInfo()
         XCTAssertTrue(
             affordanceVisible(["Add Members", "ADD_MEMBERS"], timeout: 8),
@@ -106,7 +106,7 @@ final class E2EAdminCheckTests: XCTestCase {
     /// Kick the added member: swipe the member's row → "Kick" → confirm "Yes". Assert the kick took
     /// effect on the BACKEND (member no longer in the group) — robust against the known UI list-refresh
     /// glitch. Operates on the throwaway group only.
-    func test_E2E_032_adminKicksMember() throws {
+    func test_E2E_adminKicksMember() throws {
         guard let group else { return XCTFail("no group") }
         openGroupInfo()
         openMembersModal()
@@ -129,7 +129,7 @@ final class E2EAdminCheckTests: XCTestCase {
     /// Ban the added member: swipe the member's row → "Ban" → confirm "Yes". Assert on the BACKEND that
     /// the member is banned (out of active members, into the banned list). Operates on the throwaway
     /// group only.
-    func test_E2E_033_adminBansMember() throws {
+    func test_E2E_adminBansMember() throws {
         guard let group else { return XCTFail("no group") }
         openGroupInfo()
         openMembersModal()
@@ -151,7 +151,7 @@ final class E2EAdminCheckTests: XCTestCase {
 
     /// Change the added member's scope: swipe the member's row → "Scope" → pick a new role (Admin).
     /// Assert on the BACKEND that the member's scope became admin. Operates on the throwaway group only.
-    func test_E2E_034_adminChangesScope() throws {
+    func test_E2E_adminChangesScope() throws {
         guard let group else { return XCTFail("no group") }
         openGroupInfo()
         openMembersModal()
@@ -183,7 +183,7 @@ final class E2EAdminCheckTests: XCTestCase {
     /// Demote a member to participant: promote B to admin via REST first, then swipe the member's row →
     /// "Scope" → pick "Participant" → "Save". Assert on the BACKEND that the member's scope became
     /// participant. Complements E2E-034 (promote to admin) with the demote direction.
-    func test_GRP_077_changeScopeToParticipant() throws {
+    func test_GRP_changeScopeToParticipant() throws {
         guard let group else { return XCTFail("no group") }
         // Start B at admin so a demote to participant is a real change.
         try runBlocking { try await PeerActions.setMemberScope(guid: group.guid, uid: group.memberUid, scope: "admin") }

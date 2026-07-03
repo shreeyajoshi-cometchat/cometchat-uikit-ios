@@ -22,7 +22,7 @@ final class GroupBannedBannerTests: XCTestCase {
         runBlocking { await SeedData.deleteTestGroup(c) }
     }
 
-    func test_GRP_088_openGroupAfterBannedShowsNonMemberState() throws {
+    func test_GRP_openGroupAfterBannedShowsNonMemberState() throws {
         let context = try runBlocking { () -> SeedData.TestGroupContext in
             let c = try await SeedData.createGroupOwnedByBWithAAs("participant")
             try await PeerActions.banGroupMember(guid: c.group.guid, uid: TestConfig.userAUid, by: TestConfig.userBUid)

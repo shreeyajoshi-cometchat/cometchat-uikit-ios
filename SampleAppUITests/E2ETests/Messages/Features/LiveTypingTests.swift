@@ -22,7 +22,7 @@ final class LiveTypingTests: XCTestCase {
     }
 
     /// User B (live SDK client) types to User A in a 1:1 → header subtitle shows "Typing...". (RT-TYPE-007)
-    func test_RT_TYPE_007_liveIncomingTypingShows1to1() throws {
+    func test_RT_TYPE_liveIncomingTypingShows1to1() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         try bringUpUserB()
 
@@ -44,7 +44,7 @@ final class LiveTypingTests: XCTestCase {
     }
 
     /// User B (live SDK client) types in a group → header shows "<name> is typing...". (RT-TYPE-008)
-    func test_RT_TYPE_008_liveIncomingTypingShowsGroup() throws {
+    func test_RT_TYPE_liveIncomingTypingShowsGroup() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         try bringUpUserB()

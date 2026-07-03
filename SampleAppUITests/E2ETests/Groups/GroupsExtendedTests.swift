@@ -12,13 +12,13 @@ final class GroupsExtendedTests: XCTestCase {
     override func tearDownWithError() throws { app?.terminate(); app = nil }
 
     /// The create-group entry point opens the create-group screen. (GRP-001 reachability)
-    func test_GRP_001_createGroupScreenOpens() {
+    func test_GRP_createGroupScreenOpens() {
         openCreateGroup()
         XCTAssertTrue(ComponentQueries.createGroupScreenVisible(app, timeout: 10), "Create-group screen did not appear")
     }
 
     /// Creating a group with an empty name is blocked (error shown or the sheet stays open). (GRP-002)
-    func test_GRP_002_emptyNameBlocked() {
+    func test_GRP_emptyNameBlocked() {
         openCreateGroup()
         XCTAssertTrue(ComponentQueries.createGroupScreenVisible(app, timeout: 10), "Create-group screen did not appear")
         // Tap a Create/Continue affordance without entering a name.
@@ -31,7 +31,7 @@ final class GroupsExtendedTests: XCTestCase {
     }
 
     /// The group-type selector (Public/Private/Password) toggles. (GRP-006)
-    func test_GRP_006_typeSelectorToggles() {
+    func test_GRP_typeSelectorToggles() {
         openCreateGroup()
         XCTAssertTrue(ComponentQueries.createGroupScreenVisible(app, timeout: 10), "Create-group screen did not appear")
         // Tap a type option (accept raw `.localize()` keys too) — a password field may show for Password.
@@ -48,7 +48,7 @@ final class GroupsExtendedTests: XCTestCase {
     }
 
     /// Dismissing the create-group sheet returns to the Groups tab. (GRP-007)
-    func test_GRP_007_dismissReturnsToGroups() {
+    func test_GRP_dismissReturnsToGroups() {
         openCreateGroup()
         XCTAssertTrue(ComponentQueries.createGroupScreenVisible(app, timeout: 10), "Create-group screen did not appear")
         // Cancel/back to dismiss.

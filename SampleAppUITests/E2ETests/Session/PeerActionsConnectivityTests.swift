@@ -10,7 +10,7 @@ final class PeerActionsConnectivityTests: XCTestCase {
         XCTAssertGreaterThan(id, 0, "Expected a positive message id from /v3/messages, got \(id)")
     }
 
-    func test_M10_0_newPeerHelperContracts() async throws {
+    func test_M10_newPeerHelperContracts() async throws {
         let stamp = ISO8601DateFormatter().string(from: Date())
 
         // Parent message + reaction (emoji in PATH, empty body).

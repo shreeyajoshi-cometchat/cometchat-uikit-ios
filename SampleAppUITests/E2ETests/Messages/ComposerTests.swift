@@ -23,7 +23,7 @@ final class ComposerTests: XCTestCase {
     /// The empty composer exposes a voice-record (mic) affordance, or at minimum stays stable. The mic
     /// surfaces only when the composer is empty (it swaps to Send once text is typed), so this checks the
     /// empty state.
-    func test_1TO1_085_voiceRecordButtonPresent() {
+    func test_1TO1_voiceRecordButtonPresent() {
         openSeeded()
         // Mic/voice control labels vary; accept any of them, else require the composer is simply present.
         let micCandidates = ["Voice", "Record", "Microphone", "Mic"]
@@ -35,7 +35,7 @@ final class ComposerTests: XCTestCase {
 
     /// Typing text reveals a rich-text/formatting toolbar in builds that have one, or the composer stays
     /// stable. Assert the toolbar appears OR the composer is stable.
-    func test_1TO1_086_richTextToolbarVisibleOrStable() {
+    func test_1TO1_richTextToolbarVisibleOrStable() {
         openSeeded()
         let composer = ComponentQueries.composer(app)
         composer.tap()
@@ -51,7 +51,7 @@ final class ComposerTests: XCTestCase {
     /// tree) — so this asserts the mic control is present and hittable rather than driving into the
     /// permission flow — a "recorder reachable; playback non-fatal" check (1TO1-104). A
     /// system-alert interruption monitor dismisses the permission dialog if one appears.
-    func test_1TO1_104_voiceRecorderReachable() {
+    func test_1TO1_voiceRecorderReachable() {
         addUIInterruptionMonitor(withDescription: "Microphone permission") { alert in
             for label in ["Allow", "OK", "Allow While Using App"] where alert.buttons[label].exists {
                 alert.buttons[label].tap(); return true

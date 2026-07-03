@@ -14,7 +14,7 @@ final class EdgeCasesTests: XCTestCase {
     }
 
     /// A sends 10 messages rapidly; the screen stays stable and at least one renders. (1TO1-098)
-    func test_1TO1_098_rapidSendStable() {
+    func test_1TO1_rapidSendStable() {
         openSeeded()
         let stamp = UUID().uuidString.prefix(6)
         for i in 0..<10 {
@@ -28,7 +28,7 @@ final class EdgeCasesTests: XCTestCase {
     }
 
     /// A (UI) and B (REST) send back-to-back; both are visible and the screen stays stable. (RT-EDGE-001)
-    func test_RT_EDGE_001_simultaneousSend() throws {
+    func test_RT_EDGE_simultaneousSend() throws {
         openSeeded()
         let stamp = UUID().uuidString.prefix(6)
         let aToken = "E2E-simA-\(stamp)"
@@ -40,7 +40,7 @@ final class EdgeCasesTests: XCTestCase {
     }
 
     /// B sends a 20-message burst via REST; the screen stays intact and responsive. (RT-EDGE-004)
-    func test_RT_EDGE_004_burstNoCrash() throws {
+    func test_RT_EDGE_burstNoCrash() throws {
         openSeeded()
         let stamp = UUID().uuidString.prefix(6)
         try runBlocking {
@@ -53,7 +53,7 @@ final class EdgeCasesTests: XCTestCase {
     }
 
     /// A message B sends is not duplicated on A's side. (RT-EDGE-010)
-    func test_RT_EDGE_010_noDuplicateMessage() throws {
+    func test_RT_EDGE_noDuplicateMessage() throws {
         openSeeded()
         let token = "E2E-dup\(UUID().uuidString.prefix(8))"
         try runBlocking { _ = try await PeerActions.sendTextMessage(token) }
@@ -64,7 +64,7 @@ final class EdgeCasesTests: XCTestCase {
     }
 
     /// App resume after a foreground gap keeps B's messages present. (1TO1-100 / RT-EDGE-008)
-    func test_1TO1_100_messagesPresentAfterResume() throws {
+    func test_1TO1_messagesPresentAfterResume() throws {
         openSeeded()
         let token = "E2E-resume\(UUID().uuidString.prefix(8))"
         // Background then foreground the app.
@@ -76,7 +76,7 @@ final class EdgeCasesTests: XCTestCase {
     }
 
     /// An empty conversation opens with a composer and stays stable (greeting logged non-fatal). (1TO1-097)
-    func test_1TO1_097_emptyConversationStable() {
+    func test_1TO1_emptyConversationStable() {
         // Delete the conversation so it opens empty, then open via Users (no Chats row to find).
         runBlocking { await SeedData.cleanup() }
         app = AppLauncher.launchAndWaitForHome()

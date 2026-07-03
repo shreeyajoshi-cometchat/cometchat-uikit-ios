@@ -15,7 +15,7 @@ final class ReadReceiptsTests: XCTestCase {
     }
 
     /// A sends; the message renders (sent state). (1TO1-041 / E2E-044 / RT-RCPT-001)
-    func test_1TO1_041_sentReceiptShown() throws {
+    func test_1TO1_sentReceiptShown() throws {
         openSeeded()
         let token = "E2E-sent\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -23,7 +23,7 @@ final class ReadReceiptsTests: XCTestCase {
     }
 
     /// B marks A's message delivered via REST; the message remains. (1TO1-042 / E2E-045 / RT-RCPT-002)
-    func test_1TO1_042_deliveredReceipt() throws {
+    func test_1TO1_deliveredReceipt() throws {
         openSeeded()
         let token = "E2E-deliv\(UUID().uuidString.prefix(8))"
         let id: Int = try runBlocking { try await PeerActions.sendTextMessage(token) }
@@ -33,7 +33,7 @@ final class ReadReceiptsTests: XCTestCase {
     }
 
     /// B marks A's message read via REST; the message remains. (1TO1-043 / E2E-047 / RT-RCPT-003)
-    func test_1TO1_043_readReceipt() throws {
+    func test_1TO1_readReceipt() throws {
         openSeeded()
         let token = "E2E-read\(UUID().uuidString.prefix(8))"
         let id: Int = try runBlocking { try await PeerActions.sendTextMessage(token) }
@@ -43,7 +43,7 @@ final class ReadReceiptsTests: XCTestCase {
     }
 
     /// Receipts hidden/disabled is a structural no-op on iOS — the message renders regardless. (1TO1-044 / RT-RCPT-007)
-    func test_1TO1_044_receiptsStructural() throws {
+    func test_1TO1_receiptsStructural() throws {
         openSeeded()
         let token = "E2E-rcfg\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: token)
@@ -51,7 +51,7 @@ final class ReadReceiptsTests: XCTestCase {
     }
 
     /// A sends 3, B marks the latest read via REST; all 3 remain (cumulative). (RT-RCPT-004)
-    func test_RT_RCPT_004_cumulativeRead() throws {
+    func test_RT_RCPT_cumulativeRead() throws {
         openSeeded()
         let stamp = UUID().uuidString.prefix(6)
         var lastId = 0

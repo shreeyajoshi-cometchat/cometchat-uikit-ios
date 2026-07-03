@@ -25,7 +25,7 @@ final class ThreadRepliesTests: XCTestCase {
     // MARK: - 1:1 threads
 
     /// Long-press a message → Reply in Thread opens the thread view (a composer is present). (1TO1-049)
-    func test_1TO1_049_openThreadFromLongPress() throws {
+    func test_1TO1_openThreadFromLongPress() throws {
         openSeeded()
         let token = sendOwn()
         openThread(on: token)
@@ -34,7 +34,7 @@ final class ThreadRepliesTests: XCTestCase {
     }
 
     /// Send a reply in the thread view; the screen stays stable and the reply is accepted. (1TO1-050)
-    func test_1TO1_050_sendReplyInThread() throws {
+    func test_1TO1_sendReplyInThread() throws {
         openSeeded()
         let token = sendOwn()
         openThread(on: token)
@@ -42,13 +42,15 @@ final class ThreadRepliesTests: XCTestCase {
         let reply = "E2E-treply\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: reply)
         // The reply renders in the thread, or the screen stays stable (logged non-fatal).
-        XCTAssertTrue(ComponentQueries.waitForBubble(app, text: reply, timeout: 12)
-                        || ComponentQueries.composer(app).exists,
-                      "Thread screen not stable after sending a reply")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubble(app, text: reply, timeout: 12)
+                || ComponentQueries.composer(app).exists,
+            "Thread screen not stable after sending a reply"
+        )
     }
 
     /// Back from the thread returns to the main message list. (1TO1-053)
-    func test_1TO1_053_backFromThreadReturnsToChat() throws {
+    func test_1TO1_backFromThreadReturnsToChat() throws {
         openSeeded()
         let token = sendOwn()
         openThread(on: token)
@@ -56,14 +58,16 @@ final class ThreadRepliesTests: XCTestCase {
         // Navigate back (thread view has a back affordance at the top-left header).
         if let back = ComponentQueries.headerBackButton(app) { back.tap() } else { app.navigationBars.buttons.firstMatch.tap() }
         // Back on the main chat: the parent token is visible again.
-        XCTAssertTrue(ComponentQueries.waitForBubble(app, text: token, timeout: 10)
-                        || ComponentQueries.composer(app).exists,
-                      "Did not return to the main chat from the thread")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubble(app, text: token, timeout: 10)
+                || ComponentQueries.composer(app).exists,
+            "Did not return to the main chat from the thread"
+        )
     }
 
     /// B sends a parent then 2 thread replies via REST; the parent stays in the main list and the replies
     /// do NOT appear there. (1TO1-051 / E2E-043 / RT-THREAD-002)
-    func test_1TO1_051_threadRepliesNotInMainList() throws {
+    func test_1TO1_threadRepliesNotInMainList() throws {
         openSeeded()
         let parentToken = "E2E-tparent\(UUID().uuidString.prefix(8))"
         let replyToken = "E2E-treplyOnly\(UUID().uuidString.prefix(8))"
@@ -81,21 +85,23 @@ final class ThreadRepliesTests: XCTestCase {
     }
 
     /// E2E-040: open a thread that has a seeded reply — parent and thread reachable. (E2E-040/041/042)
-    func test_E2E_040_openThreadShowsParent() throws {
+    func test_E2E_openThreadShowsParent() throws {
         openSeeded()
         let token = sendOwn()
         openThread(on: token)
         // The thread view shows the parent text somewhere and a composer.
         XCTAssertTrue(ComponentQueries.composer(app).waitForExistence(timeout: 10), "Thread composer missing")
-        XCTAssertTrue(ComponentQueries.waitForBubbleContaining(app, substring: token, timeout: 8)
-                        || ComponentQueries.composer(app).exists,
-                      "Thread did not show the parent / not stable")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubbleContaining(app, substring: token, timeout: 8)
+                || ComponentQueries.composer(app).exists,
+            "Thread did not show the parent / not stable"
+        )
     }
 
     // MARK: - Group threads (GRP-045, 047, 050)
 
     /// Open a thread from a group message (thread composer present). (GRP-045)
-    func test_GRP_045_openThreadFromGroupMessage() throws {
+    func test_GRP_openThreadFromGroupMessage() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         openGroup(group)
@@ -108,7 +114,7 @@ final class ThreadRepliesTests: XCTestCase {
     }
 
     /// Send a reply in a group thread; screen stable. (GRP-047)
-    func test_GRP_047_sendReplyInGroupThread() throws {
+    func test_GRP_sendReplyInGroupThread() throws {
         let group = try runBlocking { try await SeedData.createTestGroupWithMember() }
         defer { runBlocking { await SeedData.deleteTestGroup(group) } }
         openGroup(group)
@@ -120,9 +126,11 @@ final class ThreadRepliesTests: XCTestCase {
         XCTAssertTrue(ComponentQueries.composer(app).waitForExistence(timeout: 10), "Group thread composer missing")
         let reply = "E2E-gtreply\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: reply)
-        XCTAssertTrue(ComponentQueries.waitForBubble(app, text: reply, timeout: 12)
-                        || ComponentQueries.composer(app).exists,
-                      "Group thread not stable after reply")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubble(app, text: reply, timeout: 12)
+                || ComponentQueries.composer(app).exists,
+            "Group thread not stable after reply"
+        )
     }
 
     // MARK: - Helpers

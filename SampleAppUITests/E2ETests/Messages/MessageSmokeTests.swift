@@ -95,7 +95,7 @@ final class MessageSmokeTests: XCTestCase {
 
     /// A whitespace-only message is not sent: typing spaces and tapping Send creates no whitespace bubble
     /// and the message screen stays stable (the UIKit composer trims/rejects blank input).
-    func test_1TO1_017_whitespaceMessageBlocked() throws {
+    func test_1TO1_whitespaceMessageBlocked() throws {
         openSeeded()
         let composer = ComponentQueries.composer(app)
         composer.tap()
@@ -109,7 +109,7 @@ final class MessageSmokeTests: XCTestCase {
 
     /// A long (1000+ char) message sends and its tail renders. Assert on a unique tail token contained in
     /// the (large) bubble label.
-    func test_1TO1_018_longTextMessageSends() throws {
+    func test_1TO1_longTextMessageSends() throws {
         openSeeded()
         let tail = "longtail-\(UUID().uuidString.prefix(8))"
         let body = String(repeating: "A", count: 1024) + tail
@@ -120,7 +120,7 @@ final class MessageSmokeTests: XCTestCase {
 
     /// A message containing an @mention text sends; the trailing words render. (Mention resolution is
     /// not asserted — only the trailing plain words are checked.)
-    func test_1TO1_020_messageWithMentionSends() throws {
+    func test_1TO1_messageWithMentionSends() throws {
         openSeeded()
         let tail = "mention-\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: "@\(TestConfig.userBDisplayName) hi \(tail)")
@@ -130,7 +130,7 @@ final class MessageSmokeTests: XCTestCase {
 
     /// A message containing a URL sends and the trailing token renders (the bubble label includes the URL
     /// plus our token, so match on the token as a substring).
-    func test_1TO1_021_messageWithURLSends() throws {
+    func test_1TO1_messageWithURLSends() throws {
         openSeeded()
         let tail = "url-\(UUID().uuidString.prefix(8))"
         ComponentQueries.typeAndSend(app, text: "see https://cometchat.com \(tail)")
@@ -140,18 +140,20 @@ final class MessageSmokeTests: XCTestCase {
 
     /// A markdown-bold message sends; the inner word renders. NOTE: no underscores in test text — the
     /// UIKit formatter treats `_x_` as italic and strips them; use `**bold**`.
-    func test_1TO1_022_markdownBoldSends() throws {
+    func test_1TO1_markdownBoldSends() throws {
         openSeeded()
         let word = "boldword\(UUID().uuidString.prefix(6))"
         ComponentQueries.typeAndSend(app, text: "**\(word)**")
         // The rendered bubble may show the inner word with bold styling; assert the word is present.
-        XCTAssertTrue(ComponentQueries.waitForBubble(app, text: word, timeout: 12)
-                        || app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", word)).firstMatch.exists,
-                      "Bold word '\(word)' did not render")
+        XCTAssertTrue(
+            ComponentQueries.waitForBubble(app, text: word, timeout: 12)
+                || app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", word)).firstMatch.exists,
+            "Bold word '\(word)' did not render"
+        )
     }
 
     /// The send affordance is present once text is typed (composer exposes a Send control).
-    func test_1TO1_024_sendButtonActivatesOnText() throws {
+    func test_1TO1_sendButtonActivatesOnText() throws {
         openSeeded()
         let composer = ComponentQueries.composer(app)
         composer.tap()
@@ -162,7 +164,7 @@ final class MessageSmokeTests: XCTestCase {
 
     /// Opening a 1:1 keeps the message screen stable (the "cannot send when blocked" full behavior lives
     /// in the block suite; here we only assert screen stability).
-    func test_1TO1_025_screenStableForBlockedCase() throws {
+    func test_1TO1_screenStableForBlockedCase() throws {
         openSeeded()
         XCTAssertTrue(ComponentQueries.composer(app).exists, "Message screen not stable")
     }

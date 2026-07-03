@@ -15,21 +15,21 @@ final class PresenceTests: XCTestCase {
     }
 
     /// B comes online; the header stays stable (Online text logged, non-fatal). (RT-PRES-001)
-    func test_RT_PRES_001_peerOnlineStable() throws {
+    func test_RT_PRES_peerOnlineStable() throws {
         openSeeded()
         runBlocking { await PeerActions.goOnline() }
         XCTAssertTrue(ComponentQueries.composer(app).exists, "Header/screen not stable after peer online")
     }
 
     /// B goes offline; the header stays stable. (RT-PRES-002)
-    func test_RT_PRES_002_peerOfflineStable() throws {
+    func test_RT_PRES_peerOfflineStable() throws {
         openSeeded()
         runBlocking { await PeerActions.goOnline(); await PeerActions.goOffline() }
         XCTAssertTrue(ComponentQueries.composer(app).exists, "Header/screen not stable after peer offline")
     }
 
     /// B online while A is on the Users tab; the Users list renders/stays stable. (RT-PRES-003)
-    func test_RT_PRES_003_onlineInUsersTabStable() throws {
+    func test_RT_PRES_onlineInUsersTabStable() throws {
         try runBlocking { try await SeedData.createTestConversation() }
         app = AppLauncher.launchAndWaitForHome()
         AppLauncher.navigateToTab(app, title: AppLauncher.TabLabel.users)
@@ -39,7 +39,7 @@ final class PresenceTests: XCTestCase {
     }
 
     /// Rapid presence toggling does not crash the app. (RT-PRES-005)
-    func test_RT_PRES_005_rapidToggleStable() throws {
+    func test_RT_PRES_rapidToggleStable() throws {
         openSeeded()
         runBlocking {
             for _ in 0..<3 { await PeerActions.goOnline(); await PeerActions.goOffline() }

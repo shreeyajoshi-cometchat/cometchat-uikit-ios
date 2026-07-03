@@ -115,6 +115,27 @@ enum PeerActions {
         return data != nil
     }
     
+    /// The text of the A↔B conversation's most recent message, as the backend records it — the same
+    /// `lastMessage` the Chats-list preview renders. Read from `GET /users/{A}/conversations` (the
+    /// conversation LIST; the single `GET /conversations/{id}` returns an empty body for a 1:1 here), keyed
+    /// by `conversationWith.uid == B`. Lets a preview test assert on the server's last-message value instead
+    /// of polling the heavy Chats list, which stalls the a11y bridge. nil if the conversation/text is absent.
+    static func lastConversationMessageText(with uid: String = TestConfig.userBUid) async -> String? {
+        guard let url = URL(string: "\(baseURL)/users/\(TestConfig.userAUid)/conversations?conversationType=user&perPage=50") else {
+            return nil
+        }
+        guard let data = try? await send(url: url, method: "GET", body: nil,
+                                         onBehalfOf: nil, operation: "lastConversationMessageText"),
+              let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let list = root["data"] as? [[String: Any]]
+        else { return nil }
+        let match = list.first {
+            (($0["conversationWith"] as? [String: Any])?["uid"] as? String) == uid
+        }
+        let lastMessage = match?["lastMessage"] as? [String: Any]
+        return (lastMessage?["data"] as? [String: Any])?["text"] as? String
+    }
+
     // MARK: - Block / unblock (User A blocks/unblocks User B)
     
     /// Block User B on behalf of User A. Lets a block test confirm the action reached the backend,

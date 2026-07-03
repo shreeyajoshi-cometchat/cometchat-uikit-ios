@@ -5,7 +5,7 @@ import XCTest
 /// Accessbility identifiers exist only on SampleApp-owned screens (Login, Home
 /// tabs). Anything inside a framework component (message list / header / composer) must be located
 /// by content — `staticTexts` / `cells` / `textViews`. This file centralizes
-/// those locators so the fragile ones live in exactly one place.
+/// those locators.
 ///
 /// Locator notes:
 /// - Send button: the compact composer's send button sets `accessibilityLabel = "Send"`, so
